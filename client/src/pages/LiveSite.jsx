@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { serverUrl } from '../App'
+import { serverUrl } from '../config'
 import axios from 'axios'
 
 function LiveSite() {

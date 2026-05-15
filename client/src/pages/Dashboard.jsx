@@ -5,7 +5,7 @@ import { motion } from "motion/react"
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
-import { serverUrl } from '../App'
+import { serverUrl } from '../config'
 function Dashboard() {
     const { userData } = useSelector(state => state.user)
     const navigate = useNavigate()

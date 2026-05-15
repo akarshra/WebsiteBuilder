@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from "motion/react"
 import { useSelector } from 'react-redux';
 import axios from 'axios';
-import { serverUrl } from '../App';
+import { serverUrl } from '../config';
 const plans = [
     {
         key: "free",

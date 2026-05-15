@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from "motion/react"
 import { signInWithPopup } from 'firebase/auth'
 import { auth, provider } from '../firebase'
 import axios from "axios"
-import { serverUrl } from '../App'
+import { serverUrl } from '../config'
 import { useDispatch } from 'react-redux'
 import { setUserData } from '../redux/userSlice'
 function LoginModal({ open, onClose }) {

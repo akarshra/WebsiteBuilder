@@ -4,7 +4,7 @@ import { AnimatePresence, motion, useMotionValue, useTransform } from "motion/re
 import LoginModal from "../components/LoginModal";
 import { useDispatch, useSelector } from "react-redux";
 import { Coins } from "lucide-react";
-import { serverUrl } from "../App";
+import { serverUrl } from "../config";
 import axios from "axios";
 import { setUserData } from "../redux/userSlice";
 import { useNavigate } from "react-router-dom";
