@@ -167,21 +167,16 @@ export const generateWebsite = async (req, res) => {
             return res.status(400).json({ message: "you have not enough credits to generate a webiste" })
         }
 
-        const finalPrompt = masterPrompt.replace("USER_PROMPT", prompt)
+        const finalPrompt = masterPrompt.split("USER_PROMPT").join(prompt)
         let raw = ""
         let parsed = null
         for (let i = 0; i < 2 && !parsed; i++) {
-            raw = await generateResponse(finalPrompt)
+            const promptSuffix = i === 0 ? "" : "\n\nRETURN ONLY RAW JSON. NO MARKDOWN.";
+            raw = await generateResponse(finalPrompt + promptSuffix)
             parsed = await extractJson(raw)
-
-            if (!parsed) {
-                raw = await generateResponse(finalPrompt + "\n\nRETURN ONLY RAW JSON.")
-                parsed = await extractJson(raw)
-            }
-
         }
 
-        if (!parsed.code) {
+        if (!parsed || !parsed.code) {
             console.log("ai returned invalid response", raw)
             return res.status(400).json({ message: "ai returned invalid response" })
         }
@@ -200,6 +195,9 @@ export const generateWebsite = async (req, res) => {
                     content: parsed.message
                 }
                 
+            ],
+            versions: [
+                { code: parsed.code }
             ]
         })
 
@@ -277,17 +275,12 @@ RETURN RAW JSON ONLY:
         let raw = ""
         let parsed = null
         for (let i = 0; i < 2 && !parsed; i++) {
-            raw = await generateResponse(updatePrompt)
+            const promptSuffix = i === 0 ? "" : "\n\nRETURN ONLY RAW JSON. NO MARKDOWN.";
+            raw = await generateResponse(updatePrompt + promptSuffix)
             parsed = await extractJson(raw)
-
-            if (!parsed) {
-                raw = await generateResponse(updatePrompt + "\n\nRETURN ONLY RAW JSON.")
-                parsed = await extractJson(raw)
-            }
-
         }
 
-        if (!parsed.code) {
+        if (!parsed || !parsed.code) {
             console.log("ai returned invalid response", raw)
             return res.status(400).json({ message: "ai returned invalid response" })
         }
@@ -299,6 +292,7 @@ RETURN RAW JSON ONLY:
         )
 
         website.latestCode = parsed.code
+        website.versions.push({ code: parsed.code })
 
         await website.save()
         user.credits = user.credits - 25
@@ -367,8 +361,64 @@ export const getBySlug=async (req,res) => {
         if (!website) {
             return res.status(400).json({ message: "website not found" })
         }
+          website.views += 1;
+          await website.save();
           return res.status(200).json(website)
     } catch (error) {
         return res.status(500).json({ message: `get by slug website error ${error}` })
+    }
+}
+
+
+export const saveCode = async (req, res) => {
+    try {
+        const { code } = req.body;
+        if (!code) {
+            return res.status(400).json({ message: "code is required" });
+        }
+        const website = await Website.findOne({
+            _id: req.params.id,
+            user: req.user._id
+        });
+        if (!website) {
+            return res.status(400).json({ message: "website not found" });
+        }
+
+        website.latestCode = code;
+        website.versions.push({ code });
+        await website.save();
+
+        return res.status(200).json({ message: "Code saved successfully", code: website.latestCode });
+    } catch (error) {
+        return res.status(500).json({ message: `save code error ${error}` });
+    }
+}
+
+export const revertCode = async (req, res) => {
+    try {
+        const { versionId } = req.body;
+        if (!versionId) {
+            return res.status(400).json({ message: "versionId is required" });
+        }
+        const website = await Website.findOne({
+            _id: req.params.id,
+            user: req.user._id
+        });
+        if (!website) {
+            return res.status(400).json({ message: "website not found" });
+        }
+
+        const version = website.versions.id(versionId);
+        if (!version) {
+            return res.status(400).json({ message: "version not found" });
+        }
+
+        website.latestCode = version.code;
+        website.versions.push({ code: version.code });
+        await website.save();
+
+        return res.status(200).json({ message: "Reverted successfully", code: website.latestCode });
+    } catch (error) {
+        return res.status(500).json({ message: `revert code error ${error}` });
     }
 }

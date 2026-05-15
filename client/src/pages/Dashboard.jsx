@@ -1,5 +1,6 @@
 import { ArrowLeft, Check, Rocket, Share2 } from 'lucide-react'
 import React, { useEffect, useState } from 'react'
+// eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
@@ -59,8 +60,9 @@ function Dashboard() {
                         <button className='p-2 rounded-lg hover:bg-white/10 transition' onClick={() => navigate("/")}><ArrowLeft size={16} /></button>
                         <h1 className='text-lg font-semibold'>Dashboard</h1>
                     </div>
-                    <button className='px-4 py-2 rounded-lg bg-white text-black text-sm font-semibold hover:scale-105 transition' onClick={() => navigate("/generate")}>
-                        + New Website
+                    <button className='px-4 py-2 rounded-lg bg-white text-black text-sm font-semibold hover:scale-105 transition flex items-center gap-1' onClick={() => navigate("/generate")}>
+                        <span className='sm:hidden'>+ New</span>
+                        <span className='hidden sm:inline'>+ New Website</span>
                     </button>
                 </div>
             </div>
@@ -96,10 +98,10 @@ function Dashboard() {
                                 key={i}
                                 initial={{ opacity: 0, y: 20 }}
                                 animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: i * 0.05 }}
-                                whileHover={{ y: -6 }}
+                                transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 20 }}
+                                whileHover={{ scale: 1.02, y: -6, rotateY: 2, rotateX: -2 }}
                                
-                                className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden hover:bg-white/10 transition flex flex-col"
+                                className="rounded-2xl bg-white/5 border border-white/10 overflow-hidden shadow-lg hover:shadow-[0_0_40px_-10px_rgba(255,255,255,0.2)] hover:border-white/20 transition-all flex flex-col perspective-1000"
                             >
                                 <div className='relative h-40 bg-black cursor-pointer'  onClick={()=>navigate(`/editor/${w._id}`)}>
                                     <iframe srcDoc={w.latestCode} className='absolute inset-0 w-[140%] h-[140%] scale-[0.72] origin-top-left pointer-events-none bg-white' />
@@ -111,6 +113,7 @@ function Dashboard() {
                                     <p className='text-xs text-zinc-400'>Last Updated {""}
                                         {new Date(w.updatedAt).toLocaleDateString()}
                                     </p>
+                                    {w.deployed && <p className='text-xs text-indigo-400 mt-1 font-medium'>{w.views || 0} Views</p>}
 
                                     {!w.deployed ? (
                                         <button className=" mt-auto flex items-center justify-center gap-2

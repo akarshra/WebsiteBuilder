@@ -2,6 +2,7 @@ import { ArrowLeft, Check, Coins } from 'lucide-react';
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 
+// eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -67,7 +68,7 @@ if(planKey=="free"){
 setLoading(planKey)
 try {
     const result=await axios.post(`${serverUrl}/api/billing`,{planType:planKey},{withCredentials:true})
-    window.location.href=result.data.sessionUrl
+    window.location.assign(result.data.sessionUrl)
 } catch (error) {
     console.log(error)
     setLoading(null)
@@ -101,9 +102,9 @@ try {
                         key={i}
                         initial={{ opacity: 0, y: 40 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: i * 0.12 }}
-                        whileHover={{ y: -14, scale: 1.03 }}
-                        className={`relative rounded-3xl p-8 border backdrop-blur-xl transition-all
+                        transition={{ delay: i * 0.12, type: "spring", stiffness: 300, damping: 20 }}
+                        whileHover={{ y: -14, scale: 1.03, rotateX: 2, rotateY: -2, zIndex: 10 }}
+                        className={`relative rounded-3xl p-8 border backdrop-blur-xl transition-all perspective-1000
               ${p.popular
                                 ? "border-indigo-500 bg-gradient-to-b from-indigo-500/20 to-transparent shadow-2xl shadow-indigo-500/30"
                                 : "border-white/10 bg-white/5 hover:border-indigo-400 hover:bg-white/10"

@@ -17,7 +17,7 @@ console.log(error)
             }
         }
         getCurrentUser()
-    }, [])
+    }, [dispatch]);
 }
 
 export default useGetCurrentUser

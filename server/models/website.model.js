@@ -42,7 +42,20 @@ const websiteSchema=new mongoose.Schema({
         type:String,
         unique:true,
         sparse: true,
-    }
+    },
+    views: {
+        type: Number,
+        default: 0
+    },
+    versions: [
+        {
+            code: String,
+            timestamp: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
 
 },{timestamps:true})
 

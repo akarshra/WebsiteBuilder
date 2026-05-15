@@ -1,6 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import React, { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+// eslint-disable-next-line no-unused-vars
 import { motion } from "motion/react"
 import { useState } from 'react'
 import axios from "axios"
@@ -12,6 +13,24 @@ const PHASES = [
     "Writing HTML & CSS…",
     "Adding animations & interactions…",
     "Final quality checks…",
+];
+
+const TEMPLATES = [
+    {
+        title: "SaaS Landing Page",
+        description: "Modern landing page with hero, features, pricing, and footer.",
+        prompt: "Create a modern SaaS landing page for an AI productivity tool. Include a hero section with a compelling headline and two call to action buttons, a features section with 3 distinct feature cards and icons, a pricing table with 3 tiers (Free, Pro, Enterprise), and a clean footer. Use a sleek dark theme with vibrant purple and blue gradient accents. Make sure there are smooth micro-animations on hover and the layout is fully responsive."
+    },
+    {
+        title: "Developer Portfolio",
+        description: "Showcase your skills, projects, and contact info.",
+        prompt: "Create a minimalist and professional developer portfolio website. Include a hero section introducing the developer with a profile picture area and short bio, a 'Skills' section using a neat grid layout, a 'Projects' section featuring 3 project cards (with image placeholder, title, description, and link button), and a functional-looking contact form. Use a clean, monochromatic light theme with a high-contrast accent color like electric blue and modern sans-serif typography."
+    },
+    {
+        title: "Local Coffee Shop",
+        description: "Warm, inviting local business website with a menu.",
+        prompt: "Create a beautiful website for a local artisanal coffee shop. Include a welcoming hero section with a cozy background image placeholder and a 'View Menu' button. Add a menu section with 2 columns (Coffee, Pastries) and prices, an 'About Us' section detailing the origin of the beans, and a footer with address, operating hours, and social links. Use a warm, earthy color palette with rich browns, creams, and subtle gold accents."
+    }
 ];
 function Generate() {
     const navigate = useNavigate()
@@ -37,8 +56,10 @@ function Generate() {
 
     useEffect(() => {
         if (!loading) {
-            setPhaseIndex(0)
-            setProgress(0)
+            setTimeout(() => {
+                setPhaseIndex(0)
+                setProgress(0)
+            }, 0)
             return
         }
 
@@ -96,12 +117,28 @@ function Generate() {
 
                 </motion.div>
                 <div className='mb-14'>
-                    <h1 className='text-xl font-semibold mb-2'>Describe your website</h1>
+                    <div className='flex items-center justify-between mb-4'>
+                        <h1 className='text-xl font-semibold'>Describe your website</h1>
+                    </div>
+                    
+                    <div className='grid grid-cols-1 md:grid-cols-3 gap-4 mb-6'>
+                        {TEMPLATES.map((t, i) => (
+                            <div 
+                                key={i} 
+                                onClick={() => setPrompt(t.prompt)}
+                                className='p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 cursor-pointer transition flex flex-col gap-2'
+                            >
+                                <h3 className='font-semibold text-white'>{t.title}</h3>
+                                <p className='text-xs text-zinc-400'>{t.description}</p>
+                            </div>
+                        ))}
+                    </div>
+
                     <div className='relative'>
                         <textarea
                             onChange={(e) => setPrompt(e.target.value)}
                             value={prompt}
-                            placeholder='Describe your website in detail...'
+                            placeholder='Or describe your website in detail manually...'
                             className='w-full h-56 p-6 rounded-3xl bg-black/60 border border-white/10 outline-none resize-none text-sm leading-relaxed focus:ring-2 focus:ring-white/20'></textarea>
                     </div>
                     
