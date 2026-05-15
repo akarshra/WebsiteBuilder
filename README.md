@@ -72,7 +72,7 @@ STRIPE_WEBHOOK_SECRET=your_stripe_webhook_secret
 VITE_FIREBASE_API_KEY=your_firebase_api_key
 VITE_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 VITE_CLOUDINARY_UPLOAD_PRESET=your_cloudinary_upload_preset
-VITE_API_URL=http://localhost:8000
+VITE_BACKEND_URL=http://localhost:8000
 ```
 
 ### 4. Run the Development Servers
