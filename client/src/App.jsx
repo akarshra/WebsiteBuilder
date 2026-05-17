@@ -26,7 +26,10 @@ function App() {
           element={userData ? <WebsiteEditor /> : <Home />}
         />
         <Route path="/site/:id" element={<LiveSite />} />
-        <Route path="/pricing" element={<Pricing />} />
+        <Route
+          path="/pricing"
+          element={userData ? <Pricing /> : <Home />}
+        />
         <Route path="*" element={<Home />} />
       </Routes>
     </BrowserRouter>

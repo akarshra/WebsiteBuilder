@@ -1,4 +1,4 @@
-# AI Website Builder
+# GenWeb.ai
 
 A full-stack, AI-powered website builder platform that generates production-ready, fully responsive, multi-page HTML/CSS websites purely from text prompts. 
 
@@ -74,6 +74,8 @@ VITE_CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 VITE_CLOUDINARY_UPLOAD_PRESET=your_cloudinary_upload_preset
 VITE_BACKEND_URL=http://localhost:8000
 ```
+
+> Tip: Do not commit your local `.env` files. Use `.env.example` as the safe template and keep actual secrets in your deployment environment settings.
 
 ### 4. Run the Development Servers
 Start both servers simultaneously to use the application.
